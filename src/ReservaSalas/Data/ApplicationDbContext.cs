@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-
+using ReservaSalas.Models;
 
 namespace ReservaSalas.Data
 {
