@@ -9,6 +9,7 @@
 | `dotnet restore`                                            | Descarrega e prepara as dependências do projeto.       |
 | `dotnet build`                                              | Compila o projeto e verifica se existem erros.         |
 | `dotnet run --no-launch-profile --urls http://0.0.0.0:5000` | Executa a aplicação na porta 5000.                     |
+|`dotnet add package Microsoft.EntityFrameworkCore.Sqlite --version 8.0.0` |  Instala o fornecedor da base de dados SQLite para o Entity Framework Core |
 
 
 ## **2. Comandos de navegação e gestão de ficheiros**
