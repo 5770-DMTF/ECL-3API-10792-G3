@@ -1,0 +1,49 @@
+
+@model IEnumerable<ReservaSalas.Models.Docente>
+
+@{
+    ViewData["Title"] = "Lista de Docentes";
+}
+
+<h1>Lista de Docentes</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">
+        Adicionar Docente
+    </a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Área</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (Docente docente in Model)
+        {
+            <tr>
+                <td>@docente.Nome</td>
+                <td>@docente.Email</td>
+                <td>@docente.Area</td>
+                <td>
+                    <a asp-action="Edit"
+                       asp-route-id="@docente.Id"
+                       class="btn btn-warning btn-sm">
+                        Editar
+                    </a>
+
+                    <a asp-action="Delete"
+                       asp-route-id="@docente.Id"
+                       class="btn btn-danger btn-sm">
+                        Eliminar
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
