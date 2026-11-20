@@ -1,0 +1,37 @@
+
+@model ReservaSalas.Models.Sala
+
+@{
+    ViewData["Title"] = "Eliminar Sala";
+}
+
+<h1>Eliminar Sala</h1>
+
+<h4>Tem a certeza de que pretende eliminar esta sala?</h4>
+
+<hr />
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-3">Código</dt>
+        <dd class="col-sm-9">@Model.Codigo</dd>
+
+        <dt class="col-sm-3">Capacidade</dt>
+        <dd class="col-sm-9">@Model.Capacidade</dd>
+
+        <dt class="col-sm-3">Tipo</dt>
+        <dd class="col-sm-9">@Model.Tipo</dd>
+    </dl>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Id" />
+
+        <button type="submit" class="btn btn-danger">
+            Confirmar eliminação
+        </button>
+
+        <a asp-action="Index" class="btn btn-secondary">
+            Cancelar
+        </a>
+    </form>
+</div>

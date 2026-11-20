@@ -424,3 +424,40 @@ FodyWeavers.xsd
 
 # Official VS Code C# Dev Kit Extension exclusion
 #*.lscache
+
+
+# Ficheiros de compilação
+**/bin/
+**/obj/
+
+# Ficheiros temporários
+*.user
+*.suo
+*.cache
+*.log
+
+# Configurações locais do Visual Studio
+.vs/
+.vscode/
+
+# Ficheiros do sistema operativo
+.DS_Store
+Thumbs.db
+
+# Ficheiros de configuração locais
+appsettings.Development.json
+secrets.json
+
+# Bases de dados SQLite locais
+*.db
+*.db-shm
+*.db-wal
+
+# Ficheiros de backup
+*.bak
+*.tmp
+
+
+# Ficheiros de configuração locais
+appsettings.Development.json
+secrets.json
