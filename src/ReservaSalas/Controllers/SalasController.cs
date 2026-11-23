@@ -31,10 +31,25 @@ namespace ReservaSalas.Controllers
         }
 
         // Receber e guardar os dados da nova sala
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Sala sala)
         {
+            sala.Codigo = sala.Codigo?.Trim() ?? string.Empty;
+            sala.Tipo = sala.Tipo?.Trim() ?? string.Empty;
+
+            bool codigoExiste = await _context.Salas
+                .AnyAsync(s => s.Codigo.ToLower() == sala.Codigo.ToLower());
+
+            if (codigoExiste)
+            {
+                ModelState.AddModelError(
+                    "Codigo",
+                    "Já existe uma sala com este código."
+                );
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Salas.Add(sala);
@@ -45,7 +60,6 @@ namespace ReservaSalas.Controllers
 
             return View(sala);
         }
-
 
         // Mostrar formulário de edição
         public async Task<IActionResult> Edit(int? id)
@@ -66,6 +80,7 @@ namespace ReservaSalas.Controllers
         }
 
         // Guardar alterações da sala
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Sala sala)
@@ -73,6 +88,21 @@ namespace ReservaSalas.Controllers
             if (id != sala.Id)
             {
                 return NotFound();
+            }
+
+            sala.Codigo = sala.Codigo?.Trim() ?? string.Empty;
+            sala.Tipo = sala.Tipo?.Trim() ?? string.Empty;
+
+            bool codigoExiste = await _context.Salas
+                .AnyAsync(s => s.Codigo.ToLower() == sala.Codigo.ToLower()
+                            && s.Id != sala.Id);
+
+            if (codigoExiste)
+            {
+                ModelState.AddModelError(
+                    "Codigo",
+                    "Já existe outra sala com este código."
+                );
             }
 
             if (ModelState.IsValid)
@@ -85,6 +115,7 @@ namespace ReservaSalas.Controllers
 
             return View(sala);
         }
+
 
         // Mostrar página de confirmação da eliminação
         public async Task<IActionResult> Delete(int? id)

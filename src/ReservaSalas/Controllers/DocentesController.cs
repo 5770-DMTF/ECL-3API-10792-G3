@@ -35,6 +35,21 @@ namespace ReservaSalas.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Docente docente)
         {
+            docente.Nome = docente.Nome?.Trim() ?? string.Empty;
+            docente.Email = docente.Email?.Trim() ?? string.Empty;
+            docente.Area = docente.Area?.Trim() ?? string.Empty;
+
+            bool emailExiste = await _context.Docentes
+                .AnyAsync(d => d.Email.ToLower() == docente.Email.ToLower());
+
+            if (emailExiste)
+            {
+                ModelState.AddModelError(
+                    "Email",
+                    "Já existe um docente com este email."
+                );
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Docentes.Add(docente);
@@ -45,6 +60,7 @@ namespace ReservaSalas.Controllers
 
             return View(docente);
         }
+
 
         // Mostrar formulário de edição
         public async Task<IActionResult> Edit(int? id)
@@ -64,7 +80,7 @@ namespace ReservaSalas.Controllers
             return View(docente);
         }
 
-        // Guardar alterações do docente
+        // Guardar alterações do docente 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Docente docente)
@@ -72,6 +88,22 @@ namespace ReservaSalas.Controllers
             if (id != docente.Id)
             {
                 return NotFound();
+            }
+
+            docente.Nome = docente.Nome?.Trim() ?? string.Empty;
+            docente.Email = docente.Email?.Trim() ?? string.Empty;
+            docente.Area = docente.Area?.Trim() ?? string.Empty;
+
+            bool emailExiste = await _context.Docentes
+                .AnyAsync(d => d.Email.ToLower() == docente.Email.ToLower()
+                            && d.Id != docente.Id);
+
+            if (emailExiste)
+            {
+                ModelState.AddModelError(
+                    "Email",
+                    "Já existe outro docente com este email."
+                );
             }
 
             if (ModelState.IsValid)
@@ -84,6 +116,7 @@ namespace ReservaSalas.Controllers
 
             return View(docente);
         }
+
 
 
         // Mostrar página de confirmação da eliminação
