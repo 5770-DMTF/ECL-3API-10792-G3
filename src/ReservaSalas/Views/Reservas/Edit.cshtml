@@ -1,0 +1,87 @@
+
+@model ReservaSalas.Models.Reserva
+
+@{
+    ViewData["Title"] = "Editar Reserva";
+}
+
+<h1>Editar Reserva</h1>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit" method="post">
+
+            <input type="hidden" asp-for="Id" />
+
+            <div asp-validation-summary="All"
+                 class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="SalaId" class="form-label">Sala</label>
+                <select asp-for="SalaId"
+                        asp-items="ViewBag.Salas"
+                        class="form-select">
+                    <option value="">Selecione uma sala</option>
+                </select>
+                <span asp-validation-for="SalaId"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="DocenteId" class="form-label">Docente</label>
+                <select asp-for="DocenteId"
+                        asp-items="ViewBag.Docentes"
+                        class="form-select">
+                    <option value="">Selecione um docente</option>
+                </select>
+                <span asp-validation-for="DocenteId"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Data" class="form-label">Data</label>
+                <input asp-for="Data" type="date" class="form-control" />
+                <span asp-validation-for="Data"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="HoraInicio" class="form-label">Hora de início</label>
+                <input asp-for="HoraInicio" type="time" class="form-control" />
+                <span asp-validation-for="HoraInicio"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="HoraFim" class="form-label">Hora de fim</label>
+                <input asp-for="HoraFim" type="time" class="form-control" />
+                <span asp-validation-for="HoraFim"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Finalidade" class="form-label">Finalidade</label>
+                <input asp-for="Finalidade" class="form-control" />
+                <span asp-validation-for="Finalidade"
+                      class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Guardar Alterações
+            </button>
+
+            <a asp-action="Index" class="btn btn-secondary">
+                Voltar
+            </a>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
