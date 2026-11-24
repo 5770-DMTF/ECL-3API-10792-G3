@@ -138,18 +138,29 @@ namespace ReservaSalas.Controllers
             return View(docente);
         }
 
-        // Eliminar docente da base de dados
+        // Eliminar docente da base de dados        
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var docente = await _context.Docentes.FindAsync(id);
 
-            if (docente != null)
+            if (docente == null)
             {
-                _context.Docentes.Remove(docente);
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
+
+            bool temReservas = await _context.Reservas
+                .AnyAsync(r => r.DocenteId == id);
+
+            if (temReservas)
+            {
+                TempData["Erro"] = "Não é possível eliminar este docente porque existem reservas associadas.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            _context.Docentes.Remove(docente);
+            await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }

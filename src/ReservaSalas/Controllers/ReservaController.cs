@@ -14,13 +14,57 @@ namespace ReservaSalas.Controllers
         {
             _context = context;
         }
-
-        public async Task<IActionResult> Index()
+        
+        public async Task<IActionResult> Index(
+            int? salaId,
+            int? docenteId,
+            DateOnly? data)
         {
-            var reservas = await _context.Reservas
+            var query = _context.Reservas
                 .Include(r => r.Sala)
                 .Include(r => r.Docente)
+                .AsQueryable();
+
+            // Filtrar por sala
+            if (salaId.HasValue)
+            {
+                query = query.Where(r => r.SalaId == salaId.Value);
+            }
+
+            // Filtrar por docente
+            if (docenteId.HasValue)
+            {
+                query = query.Where(r => r.DocenteId == docenteId.Value);
+            }
+
+            // Filtrar por data
+            if (data.HasValue)
+            {
+                query = query.Where(r => r.Data == data.Value);
+            }
+
+            // Ordenar por data e hora de início
+            var reservas = await query
+                .OrderBy(r => r.Data)
+                .ThenBy(r => r.HoraInicio)
                 .ToListAsync();
+
+            // Carregar opções dos filtros
+            ViewBag.Salas = new SelectList(
+                await _context.Salas.OrderBy(s => s.Codigo).ToListAsync(),
+                "Id",
+                "Codigo",
+                salaId
+            );
+
+            ViewBag.Docentes = new SelectList(
+                await _context.Docentes.OrderBy(d => d.Nome).ToListAsync(),
+                "Id",
+                "Nome",
+                docenteId
+            );
+
+            ViewBag.DataFiltro = data?.ToString("yyyy-MM-dd") ?? "";
 
             return View(reservas);
         }

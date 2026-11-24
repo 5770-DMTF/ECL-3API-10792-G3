@@ -136,20 +136,32 @@ namespace ReservaSalas.Controllers
             return View(sala);
         }
 
-        // Eliminar sala da base de dados
+        // Eliminar sala da base de dados        
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var sala = await _context.Salas.FindAsync(id);
 
-            if (sala != null)
+            if (sala == null)
             {
-                _context.Salas.Remove(sala);
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
+
+            bool temReservas = await _context.Reservas
+                .AnyAsync(r => r.SalaId == id);
+
+            if (temReservas)
+            {
+                TempData["Erro"] = "Não é possível eliminar esta sala porque existem reservas associadas.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            _context.Salas.Remove(sala);
+            await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }
+
     }
 }
