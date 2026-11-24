@@ -113,8 +113,42 @@ No GitHub Codespaces, a aplicação ficará disponível através da porta 5000. 
 
 ## 7. Base de dados
 
-O projeto utiliza SQLite para armazenar os dados relativos às salas, docentes e reservas.
-A base de dados será gerida através do Entity Framework Core, utilizando migrations para criar e atualizar a estrutura das tabelas.
+A aplicação utiliza **SQLite** como sistema de gestão de base de dados e **Entity Framework Core** como ORM para assegurar a comunicação entre a aplicação e os dados.
+
+A ligação à base de dados é configurada através da classe `ApplicationDbContext`, que permite gerir as entidades e as respetivas relações.
+
+### 7.1. Estrutura da base de dados
+
+A base de dados é constituída por três tabelas principais:
+
+- **Salas:** armazena a informação das salas, incluindo o código, a capacidade e o tipo.
+- **Docentes:** armazena os dados dos docentes, nomeadamente o nome, o email e a área.
+- **Reservas:** regista as reservas efetuadas, incluindo a sala, o docente, a data, a hora de início, a hora de fim e a finalidade.
+
+### 7.2. Relações entre tabelas
+
+Foram definidas as seguintes relações:
+
+- **Salas – Reservas:** relação de um para muitos (1:N). Uma sala pode ter várias reservas, mas cada reserva está associada a uma única sala.
+- **Docentes – Reservas:** relação de um para muitos (1:N). Um docente pode efetuar várias reservas, mas cada reserva pertence a um único docente.
+
+As relações são asseguradas através das chaves primárias e estrangeiras.
+
+### 7.3. Migrations
+
+A estrutura da base de dados é gerida através de migrations do Entity Framework Core.
+
+Foi criada a migration inicial `InitialCreate`, responsável pela criação das tabelas e das respetivas relações.
+
+Para criar ou atualizar a base de dados, utilizar o seguinte comando na pasta `src/ReservaSalas`:
+
+```dotnet ef database update```
+
+### 7.4. Armazenamento
+
+A base de dados é armazenada localmente no ficheiro `reservas.db`, localizado na pasta do projeto.
+
+Este ficheiro está excluído do controlo de versões através do `.gitignore`, evitando a publicação dos dados locais no repositório GitHub.
 
 ## 8. Funcionalidades previstas
 
